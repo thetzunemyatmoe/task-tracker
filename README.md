@@ -15,8 +15,8 @@ This project is a simple command line interface (CLI) to track. The application 
 This project uses Java 21 as programming language. To manage JSON, `json.simple` library is used.
 
 ## TODO
-- [] Enable command line arguments
-- [] Task class
+- [x] Enable command line arguments
+- [x] Task class
 - [] JSON file
 - [] Create functionality
 - [] Read functionality
