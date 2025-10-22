@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class Main {
@@ -28,11 +29,7 @@ public class Main {
             try (FileReader reader = new FileReader(file)){
                 Type listType = new TypeToken<List<Task>>() {}.getType();
                 List<Task> loaded = gson.fromJson(reader, listType);
-                if (loaded != null) {
-                    taskList = loaded;
-                } else {
-                    taskList = new ArrayList<>();
-                }
+                taskList = Objects.requireNonNullElseGet(loaded, ArrayList::new);
             } catch (Exception e) {
                 System.err.println(e.getMessage());
                 taskList = new ArrayList<>();
@@ -40,6 +37,7 @@ public class Main {
         } else {
             taskList = new ArrayList<>();
         }
+
 
         Scanner scanner = new Scanner(System.in);
         int isContinue;
@@ -76,7 +74,7 @@ public class Main {
 
                     // Create new task object
                     int id;
-                    if (taskList == null || taskList.isEmpty()) {
+                    if (taskList.isEmpty()) {
                         id = 1;
                     } else {
                         id = taskList.size() + 1;
@@ -97,26 +95,17 @@ public class Main {
                     break;
                 case 4:
                     displayList(taskList);
-
-                    System.out.print("Enter ID of the task to delete: ");
-                    int deletingId = scanner.nextInt();
-                    boolean removed = taskList.removeIf(task -> task.getId() == deletingId);
-                    if (removed) {
-                        System.out.println("Task [" + deletingId+ "] removed.");
-                    }
+                    if (delete(scanner, taskList)) break;
                     displayList(taskList);
                     break;
                 default:
                     System.out.println("Invalid option");
             }
 
-            while (true) {
+            do {
                 System.out.print("Press [1] to continue or [0] to save the changes and exit: ");
                 isContinue = scanner.nextInt();
-                if (isContinue == 0 || isContinue == 1) {
-                    break;
-                }
-            }
+            } while (isContinue != 0 && isContinue != 1);
         } while (isContinue == 1);
 
         try (FileWriter fileWriter = new FileWriter(file, false)){
@@ -129,6 +118,34 @@ public class Main {
         System.out.println("Program exited.");
         System.exit(0);
 
+    }
+
+    static boolean delete(Scanner scanner, List<Task> taskList) {
+        int idFromUser;
+        boolean isIdExist;
+        do {
+            System.out.print("Enter ID of the task to delete or [0] to undo: ");
+            idFromUser = scanner.nextInt();
+
+            if (idFromUser == 0) {
+                break;
+            }
+
+            int matchId = idFromUser;
+            isIdExist = taskList.stream().anyMatch(task -> task.getId() == matchId);
+
+        } while (!isIdExist);
+
+        if (idFromUser == 0) {
+            return true;
+        }
+
+        int deleteId = idFromUser;
+        boolean removed = taskList.removeIf(task -> task.getId() == deleteId);
+        if (removed) {
+            System.out.println("Task [" + deleteId+ "] removed.");
+        }
+        return false;
     }
 
     // Display functionality

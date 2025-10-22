@@ -1,23 +1,9 @@
 [
   {
-    "id": 2,
-    "description": "World",
+    "id": 1,
+    "description": "Handle input mismatch",
     "status": "TODO",
-    "createdAt": "2025-10-22T18:03:46.52361",
-    "updatedAt": "2025-10-22T18:03:46.524347"
-  },
-  {
-    "id": 3,
-    "description": "Inputmismatchexceptionhandle",
-    "status": "TODO",
-    "createdAt": "2025-10-22T18:05:27.990256",
-    "updatedAt": "2025-10-22T18:05:27.991074"
-  },
-  {
-    "id": 4,
-    "description": "Cook dinner",
-    "status": "TODO",
-    "createdAt": "2025-10-22T19:53:44.619567",
-    "updatedAt": "2025-10-22T19:53:44.621507"
+    "createdAt": "2025-10-22T23:54:21.244449",
+    "updatedAt": "2025-10-22T23:54:21.245977"
   }
 ]
