@@ -1,30 +1,23 @@
 [
   {
     "id": 1,
-    "description": "hello",
+    "description": "Hello",
     "status": "TODO",
-    "createdAt": "2025-10-22T17:21:42.839495",
-    "updatedAt": "2025-10-22T17:21:42.840298"
+    "createdAt": "2025-10-22T18:03:33.784431",
+    "updatedAt": "2025-10-22T18:03:33.785037"
   },
   {
-    "id": 1,
-    "description": "girl what the hell",
+    "id": 2,
+    "description": "World",
     "status": "TODO",
-    "createdAt": "2025-10-22T17:31:20.869774",
-    "updatedAt": "2025-10-22T17:31:20.870709"
+    "createdAt": "2025-10-22T18:03:46.52361",
+    "updatedAt": "2025-10-22T18:03:46.524347"
   },
   {
-    "id": 1,
-    "description": "fold laundry",
+    "id": 3,
+    "description": "Inputmismatchexceptionhandle",
     "status": "TODO",
-    "createdAt": "2025-10-22T17:33:07.316585",
-    "updatedAt": "2025-10-22T17:33:07.317494"
-  },
-  {
-    "id": 1,
-    "description": "laundry fold",
-    "status": "TODO",
-    "createdAt": "2025-10-22T17:33:18.644914",
-    "updatedAt": "2025-10-22T17:33:18.645076"
+    "createdAt": "2025-10-22T18:05:27.990256",
+    "updatedAt": "2025-10-22T18:05:27.991074"
   }
 ]

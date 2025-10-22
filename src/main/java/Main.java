@@ -9,6 +9,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.lang.reflect.Type;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -29,6 +30,8 @@ public class Main {
                 List<Task> loaded = gson.fromJson(reader, listType);
                 if (loaded != null) {
                     taskList = loaded;
+                } else {
+                    taskList = new ArrayList<>();
                 }
             } catch (Exception e) {
                 System.err.println(e.getMessage());
@@ -42,6 +45,8 @@ public class Main {
         int isContinue;
 
         do {
+
+            // TODO: Input mismatch
             System.out.print("""
                 Options
                 [1] To add
@@ -60,11 +65,39 @@ public class Main {
                     String description = scanner.nextLine();
 
                     // Create new task object
-                    Task newTask = new Task(description);
+                    int id;
+                    if (taskList == null || taskList.isEmpty()) {
+                        id = 1;
+                    } else {
+                        id = taskList.size() + 1;
+                    }
+
+                    Task newTask = new Task(id,description);
                     taskList.add(newTask);
                     break;
                 case 2:
-                    System.out.println("View");
+                    if (taskList == null || taskList.isEmpty()) {
+                        System.out.println("No tasks found.");
+                        break;
+                    }
+
+                    // Set up a formatter for LocalDateTime
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
+                    // Print header
+                    System.out.printf("%-5s | %-30s | %-10s | %-16s | %-16s%n",
+                            "ID", "Description", "Status", "Created At", "Updated At");
+                    System.out.println("-------------------------------------------------------------------------------------");
+
+                    // Print each task
+                    for (Task t : taskList) {
+                        System.out.printf("%-5d | %-30s | %-10s | %-16s | %-16s%n",
+                                t.getId(),
+                                t.getDescription(),
+                                t.getStatus(),
+                                t.getCreatedAt().format(formatter),
+                                t.getUpdatedAt().format(formatter));
+                    }
                     break;
                 case 3:
                     System.out.println("Update");
@@ -72,27 +105,27 @@ public class Main {
                 case 4:
                     System.out.println("Delete");
                     break;
-                case 5:
-                    System.out.println("Exit successfully");
-                    break;
                 default:
                     System.out.println("Invalid option");
-                    System.exit(1);
-
             }
             System.out.print("Press [1] to continue or [0]  to exit:");
             isContinue = scanner.nextInt();
+
+            if (!(isContinue == 0 || isContinue == 1)) {
+                System.err.println("Invalid choice (No changes are saved).");
+                System.exit(1);
+            }
         } while (isContinue == 1);
 
         try (FileWriter fileWriter = new FileWriter(file, false)){
             gson.toJson(taskList, fileWriter);
         } catch (Exception e) {
             System.err.println(e.getMessage());
+        } finally {
+            System.out.println("Changes are saved.");
         }
         System.out.println("Program exited.");
         System.exit(0);
-
-
 
     }
 }
