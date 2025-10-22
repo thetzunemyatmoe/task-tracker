@@ -18,7 +18,7 @@ This project uses Java 21 as programming language. To manage JSON, `json.simple`
 - [x] Enable command line arguments
 - [x] Task class
 - [] JSON file
-- [] Create functionality
+- [x] Create functionality
 - [] Read functionality
 - [] Update functionality
 - [] Delete functionality

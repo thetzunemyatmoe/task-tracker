@@ -1,31 +1,42 @@
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import helper.LocalDateTimeAdapter;
 import model.Task;
 
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.lang.reflect.Type;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
 
         File file = new File("./src/main/java/db/database.json");
+        List<Task> taskList = null;
 
-        ArrayList<Task> taskList;
+        // Gson to serialize and deserialize
+        Gson gson = new GsonBuilder().setPrettyPrinting().registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter()).create();
 
 
         if (file.exists()) {
-            // TODO: Read from the file and store each item in the list in case of a persistence exist
-            taskList = new ArrayList<>();
+            try (FileReader reader = new FileReader(file)){
+                Type listType = new TypeToken<List<Task>>() {}.getType();
+                List<Task> loaded = gson.fromJson(reader, listType);
+                if (loaded != null) {
+                    taskList = loaded;
+                }
+            } catch (Exception e) {
+                System.err.println(e.getMessage());
+                taskList = new ArrayList<>();
+            }
         } else {
-            // Create an empty array list in the case of no persistence exist
             taskList = new ArrayList<>();
         }
-
-
-
 
         Scanner scanner = new Scanner(System.in);
         int isContinue;
@@ -51,13 +62,6 @@ public class Main {
                     // Create new task object
                     Task newTask = new Task(description);
                     taskList.add(newTask);
-
-                    // Gson to serialize and deserialize
-                    Gson gson = new GsonBuilder().setPrettyPrinting().registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter()).create();
-                    for (Task task : taskList) {
-                        String taskStr = gson.toJson(task);
-                        System.out.println(taskStr);
-                    }
                     break;
                 case 2:
                     System.out.println("View");
@@ -80,7 +84,11 @@ public class Main {
             isContinue = scanner.nextInt();
         } while (isContinue == 1);
 
-
+        try (FileWriter fileWriter = new FileWriter(file, false)){
+            gson.toJson(taskList, fileWriter);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
         System.out.println("Program exited.");
         System.exit(0);
 
