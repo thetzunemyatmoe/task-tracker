@@ -60,9 +60,19 @@ public class Main {
 
             switch (option) {
                 case 1:
-                    // Take user input
-                    System.out.print("Add a short description of the task: ");
-                    String description = scanner.nextLine();
+                    String description;
+                    do {
+                        System.out.print("Add a short description of the task: ");
+                        description = scanner.nextLine();
+
+                        if (description.isEmpty()) {
+                            System.out.println("Description required");
+                        } else if (description.length() > 30) {
+                            System.out.println("Description too long");
+                        }
+
+                    } while (description.isBlank() || description.length() > 30);
+
 
                     // Create new task object
                     int id;
@@ -76,44 +86,36 @@ public class Main {
                     taskList.add(newTask);
                     break;
                 case 2:
-                    if (taskList == null || taskList.isEmpty()) {
+                    if (taskList.isEmpty()) {
                         System.out.println("No tasks found.");
                         break;
                     }
-
-                    // Set up a formatter for LocalDateTime
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-
-                    // Print header
-                    System.out.printf("%-5s | %-30s | %-10s | %-16s | %-16s%n",
-                            "ID", "Description", "Status", "Created At", "Updated At");
-                    System.out.println("-------------------------------------------------------------------------------------");
-
-                    // Print each task
-                    for (Task t : taskList) {
-                        System.out.printf("%-5d | %-30s | %-10s | %-16s | %-16s%n",
-                                t.getId(),
-                                t.getDescription(),
-                                t.getStatus(),
-                                t.getCreatedAt().format(formatter),
-                                t.getUpdatedAt().format(formatter));
-                    }
+                    displayList(taskList);
                     break;
                 case 3:
                     System.out.println("Update");
                     break;
                 case 4:
-                    System.out.println("Delete");
+                    displayList(taskList);
+
+                    System.out.print("Enter ID of the task to delete: ");
+                    int deletingId = scanner.nextInt();
+                    boolean removed = taskList.removeIf(task -> task.getId() == deletingId);
+                    if (removed) {
+                        System.out.println("Task [" + deletingId+ "] removed.");
+                    }
+                    displayList(taskList);
                     break;
                 default:
                     System.out.println("Invalid option");
             }
-            System.out.print("Press [1] to continue or [0]  to exit:");
-            isContinue = scanner.nextInt();
 
-            if (!(isContinue == 0 || isContinue == 1)) {
-                System.err.println("Invalid choice (No changes are saved).");
-                System.exit(1);
+            while (true) {
+                System.out.print("Press [1] to continue or [0] to save the changes and exit: ");
+                isContinue = scanner.nextInt();
+                if (isContinue == 0 || isContinue == 1) {
+                    break;
+                }
             }
         } while (isContinue == 1);
 
@@ -127,5 +129,24 @@ public class Main {
         System.out.println("Program exited.");
         System.exit(0);
 
+    }
+
+    // Display functionality
+    static void displayList(List<Task> taskList) {
+        DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        // Print header
+        System.out.printf("%-5s | %-30s | %-10s | %-16s | %-16s%n",
+                "ID", "Description", "Status", "Created At", "Updated At");
+        System.out.println("-------------------------------------------------------------------------------------");
+
+        // Print each task
+        for (Task t : taskList) {
+            System.out.printf("%-5d | %-30s | %-10s | %-16s | %-16s%n",
+                    t.getId(),
+                    t.getDescription(),
+                    t.getStatus(),
+                    t.getCreatedAt().format(formatter1),
+                    t.getUpdatedAt().format(formatter1));
+        }
     }
 }
