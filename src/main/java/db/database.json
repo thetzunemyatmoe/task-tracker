@@ -1,30 +1,9 @@
 [
   {
     "id": 1,
-    "description": "Handle input mismatch",
+    "description": "COFFEE AND TEA",
     "status": "TODO",
-    "createdAt": "2025-10-22T23:54:21.244449",
-    "updatedAt": "2025-10-22T23:54:21.245977"
-  },
-  {
-    "id": 3,
-    "description": "HelloPeople",
-    "status": "TODO",
-    "createdAt": "2025-10-24T15:09:52.448175",
-    "updatedAt": "2025-10-24T15:09:52.451046"
-  },
-  {
-    "id": 6,
-    "description": "lost in the universe",
-    "status": "TODO",
-    "createdAt": "2025-10-24T16:10:22.693779",
-    "updatedAt": "2025-10-24T16:10:22.695354"
-  },
-  {
-    "id": 2,
-    "description": "RUN",
-    "status": "TODO",
-    "createdAt": "2025-10-24T16:40:29.472466",
-    "updatedAt": "2025-10-24T16:40:29.473451"
+    "createdAt": "2025-10-24T20:35:51.239173",
+    "updatedAt": "2025-10-24T20:35:51.240413"
   }
 ]

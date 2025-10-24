@@ -32,14 +32,10 @@ public class Main {
                     taskService.addTask(scanner, idHelper, idSet, taskList);
                     break;
                 case 2:
-                    if (taskList.isEmpty()) {
-                        System.out.println("No tasks found.");
-                        break;
-                    }
-                    taskService.displayList(taskList);
+                    taskService.displayTaskList(taskList);
                     break;
                 case 3:
-                    System.out.println("Update");
+                    taskService.updateTaskList(scanner, taskList, idSet);
                     break;
                 case 4:
                     taskService.delete(scanner, taskList, idSet);
