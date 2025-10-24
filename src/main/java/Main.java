@@ -10,10 +10,7 @@ import java.io.FileWriter;
 import java.lang.reflect.Type;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -38,6 +35,10 @@ public class Main {
             taskList = new ArrayList<>();
         }
 
+        Set<Integer> idSet = new HashSet<>();
+        for (Task task: taskList) {
+            idSet.add(task.getId());
+        }
 
         Scanner scanner = new Scanner(System.in);
         int isContinue;
@@ -71,15 +72,8 @@ public class Main {
 
                     } while (description.isBlank() || description.length() > 30);
 
-
                     // Create new task object
-                    int id;
-                    if (taskList.isEmpty()) {
-                        id = 1;
-                    } else {
-                        id = taskList.size() + 1;
-                    }
-
+                    int id = generateId(idSet);
                     Task newTask = new Task(id,description);
                     taskList.add(newTask);
                     break;
@@ -95,7 +89,7 @@ public class Main {
                     break;
                 case 4:
                     displayList(taskList);
-                    if (delete(scanner, taskList)) break;
+                    if (delete(scanner, taskList, idSet)) break;
                     displayList(taskList);
                     break;
                 default:
@@ -120,30 +114,37 @@ public class Main {
 
     }
 
-    static boolean delete(Scanner scanner, List<Task> taskList) {
-        int idFromUser;
-        boolean isIdExist;
+    static int generateId(Set<Integer> idSet) {
+        int id = 1;
+        while (idSet.contains(id)) {
+            id++;
+        }
+        return id;
+    }
+
+    static boolean delete(Scanner scanner, List<Task> taskList, Set<Integer> idSet) {
+        int idToDelete;
         do {
             System.out.print("Enter ID of the task to delete or [0] to undo: ");
-            idFromUser = scanner.nextInt();
+            idToDelete = scanner.nextInt();
 
-            if (idFromUser == 0) {
-                break;
+            if (idToDelete == 0) {
+                return true;
             }
 
-            int matchId = idFromUser;
-            isIdExist = taskList.stream().anyMatch(task -> task.getId() == matchId);
+            if (!idSet.contains(idToDelete)) {
+                System.out.println("Invalid ID. Try again.");
+            }
 
-        } while (!isIdExist);
+        } while (!idSet.contains(idToDelete));
 
-        if (idFromUser == 0) {
-            return true;
-        }
 
-        int deleteId = idFromUser;
+        int deleteId = idToDelete;
         boolean removed = taskList.removeIf(task -> task.getId() == deleteId);
+
         if (removed) {
             System.out.println("Task [" + deleteId+ "] removed.");
+            idSet.remove(deleteId);
         }
         return false;
     }
