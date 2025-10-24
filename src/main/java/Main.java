@@ -1,8 +1,8 @@
 import helper.FileOperation;
 import helper.ID;
+import helper.InputValidator;
 import model.Task;
 import service.TaskCRUDService;
-
 import java.io.File;
 import java.util.*;
 
@@ -11,10 +11,9 @@ public class Main {
 
         Scanner scanner = new Scanner(System.in);
         TaskCRUDService taskService = new TaskCRUDService();
-        ID idHelper = new ID();
         FileOperation fileOperation = new FileOperation(new File("./src/main/java/db/database.json"));
         List<Task> taskList = fileOperation.loadTasks();
-        Set<Integer> idSet = idHelper.getIdSet(taskList);
+        Set<Integer> idSet = ID.getIdSet(taskList);
 
 
         int isContinue;
@@ -22,27 +21,39 @@ public class Main {
             System.out.print("""
                 Options
                 [1] To add
-                [2] To view
+                [2] To view [ALL]
                 [3] To update
                 [4] To delete
+                [5] To view [TODO ONLY]
+                [6] To view [IN_PROGRESS ONLY]
+                [7] To view [DONE ONLY]
                 """);
-            int option = getValidInput(scanner, 1, 4, "Choose an option (1-4): ");
+            int option = InputValidator.getValidInput(scanner, 1, 7, "Choose an option (1-7): ");
             switch (option) {
                 case 1:
-                    taskService.addTask(scanner, idHelper, idSet, taskList);
+                    taskService.addTask(scanner, idSet, taskList);
                     break;
                 case 2:
-                    taskService.displayTaskList(taskList);
+                    taskService.displayTasks(taskList, 4);
                     break;
                 case 3:
-                    taskService.updateTaskList(scanner, taskList, idSet);
+                    taskService.updateTask(scanner, taskList, idSet);
                     break;
                 case 4:
-                    taskService.delete(scanner, taskList, idSet);
+                    taskService.deleteTask(scanner, taskList, idSet);
+                    break;
+                case 5:
+                    taskService.displayTasks(taskList, 1);
+                    break;
+                case 6:
+                    taskService.displayTasks(taskList, 2);
+                    break;
+                case 7:
+                    taskService.displayTasks(taskList, 3);
                     break;
             }
 
-            isContinue = getValidInput(scanner, 0, 1, "Press [1] to continue or [0] to save the changes and exit: ");
+            isContinue = InputValidator.getValidInput(scanner, 0, 1, "Press [1] to continue or [0] to save the changes and exit: ");
         } while (isContinue == 1);
 
         fileOperation.saveTask(taskList);
@@ -51,23 +62,5 @@ public class Main {
 
     }
 
-    private static int getValidInput(Scanner scanner, int min, int max, String prompt) {
-        int val;
-        do {
-            System.out.print(prompt);
-            try {
-                val = scanner.nextInt();
-                scanner.nextLine();
 
-                if (val >= min && val <= max) {
-                    return val;
-                } else {
-                    System.out.println("Choose between " + min + " and " + max +".");
-                }
-            } catch (InputMismatchException exception) {
-                System.out.println("Enter a number.");
-                scanner.nextLine();
-            }
-        } while (true);
-    }
 }

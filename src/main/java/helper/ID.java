@@ -8,11 +8,8 @@ import java.util.Set;
 
 public class ID {
 
-    public ID() {
 
-    }
-
-    public int generateId(Set<Integer> idSet) {
+    public static int generateId(Set<Integer> idSet) {
         int id = 1;
         while (idSet.contains(id)) {
             id++;
@@ -20,7 +17,7 @@ public class ID {
         return id;
     }
 
-    public Set<Integer> getIdSet(List<Task> taskList) {
+    public static Set<Integer> getIdSet(List<Task> taskList) {
         Set<Integer> idSet = new HashSet<>();
         for (Task task: taskList) {
             idSet.add(task.getId());

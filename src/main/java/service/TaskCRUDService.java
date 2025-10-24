@@ -1,6 +1,7 @@
 package service;
 
 import helper.ID;
+import helper.InputValidator;
 import model.Status;
 import model.Task;
 
@@ -13,8 +14,8 @@ public class TaskCRUDService {
 
     }
 
-    // Create and add
-    public void addTask(Scanner scanner, ID idHelper, Set<Integer> idSet, List<Task> taskList) {
+    // Add (C)
+    public void addTask(Scanner scanner, Set<Integer> idSet, List<Task> taskList) {
         String description;
         do {
             System.out.print("Add a short description of the task: ");
@@ -29,20 +30,35 @@ public class TaskCRUDService {
         } while (description.isBlank() || description.length() > 30);
 
         // Create new task object
-        int id = idHelper.generateId(idSet);
+        int id = ID.generateId(idSet);
         Task newTask = new Task(id,description);
         System.out.println("Task with description ('" + description + "') is created and set to 'TDOO' by default");
         taskList.add(newTask);
         idSet.add(id);
     }
 
-    // List
-    public void displayTaskList(List<Task> taskList) {
-        // TODO: Make it return true or false
+    // List (R)
+    public boolean displayTasks(List<Task> taskList, int mode) {
+
         if (taskList.isEmpty()) {
             System.out.println("No tasks found.");
-            return;
+            return false;
         }
+
+        Set<Status> statusList = new HashSet<>();
+        if (mode == 1) {
+            statusList.add(Status.TODO);
+        } else if (mode == 2) {
+            statusList.add(Status.IN_PROGRESS);
+        } else if (mode == 3) {
+            statusList.add(Status.DONE);
+        } else if (mode == 4) {
+            statusList.add(Status.TODO);
+            statusList.add(Status.IN_PROGRESS);
+            statusList.add(Status.DONE);
+        }
+
+
         DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         // Print header
         System.out.printf("%-5s | %-30s | %-12s | %-16s | %-16s%n",
@@ -51,40 +67,28 @@ public class TaskCRUDService {
 
         // Print each task
         for (Task t : taskList) {
-            System.out.printf("%-5d | %-30s | %-12s | %-16s | %-16s%n",
-                    t.getId(),
-                    t.getDescription(),
-                    t.getStatus(),
-                    t.getCreatedAt().format(formatter1),
-                    t.getUpdatedAt().format(formatter1));
+            if (statusList.contains(t.getStatus())) {
+                System.out.printf("%-5d | %-30s | %-12s | %-16s | %-16s%n",
+                        t.getId(),
+                        t.getDescription(),
+                        t.getStatus(),
+                        t.getCreatedAt().format(formatter1),
+                        t.getUpdatedAt().format(formatter1));
+            }
+
         }
+
+        return true;
     }
 
-    // Delete
-    public void delete(Scanner scanner, List<Task> taskList, Set<Integer> idSet) {
-
+    // Update (U)
+    public void updateTask(Scanner scanner, List<Task> taskList, Set<Integer> idSet) {
         // Prompt use with the list
-        displayTaskList(taskList);
-        int deleteId = getValidIdFromUser(scanner, idSet, "Enter ID of the task to delete or [0] to undo: ");
-
-        if (deleteId == 0) {
+        if(!displayTasks(taskList, 4)){
             return;
-        }
-        boolean removed = taskList.removeIf(task -> task.getId() == deleteId);
+        };
 
-        if (removed) {
-            System.out.println("Task [" + deleteId+ "] removed.");
-            idSet.remove(deleteId);
-            // Prompt use with the updated list
-            displayTaskList(taskList);
-        }
-    }
-
-    public void updateTaskList(Scanner scanner, List<Task> taskList, Set<Integer> idSet) {
-        // Prompt use with the list
-        displayTaskList(taskList);
-
-        int updateId = getValidIdFromUser(scanner, idSet, "Enter ID of the task to update or [0] to undo: ");
+        int updateId = InputValidator.getValidIdFromUser(scanner, idSet, "Enter ID of the task to update or [0] to undo: ");
         if (updateId == 0) {
             System.out.println("Exiting");
             return;
@@ -138,43 +142,39 @@ public class TaskCRUDService {
                 default:
                     System.out.println("Invalid input");
                     break;
-                }
+            }
         } else {
             taskToUpdate.setDescription(userInput);
             System.out.println("Description updated.");
 
         }
 
-
-
-
+        // Prompt user after update
+        displayTasks(taskList, 4);
 
     }
 
-    private static int getValidIdFromUser(Scanner scanner, Set<Integer> idSet, String prompt) {
-        int idToUpdate;
-        while (true) {
-            System.out.print(prompt);
+    // Delete (D)
+    public void deleteTask(Scanner scanner, List<Task> taskList, Set<Integer> idSet) {
 
-            try {
-                idToUpdate = scanner.nextInt();
-                scanner.nextLine();
+        // Prompt use with the list
+        if(!displayTasks(taskList, 4)) {
+            return;
+        };
+        int deleteId = InputValidator.getValidIdFromUser(scanner, idSet, "Enter ID of the task to delete or [0] to undo: ");
 
-                if (idToUpdate == 0) {
-                    return 0;
-                }
-
-                if (idSet.contains(idToUpdate)) {
-                    break; // valid ID, exit loop
-                } else {
-                    System.out.println("Invalid ID. Try again.");
-                }
-
-            } catch (InputMismatchException e) {
-                System.out.println("Enter a number.");
-                scanner.nextLine(); // clear invalid input
-            }
+        if (deleteId == 0) {
+            return;
         }
-    return idToUpdate;
+        boolean removed = taskList.removeIf(task -> task.getId() == deleteId);
+
+        if (removed) {
+            System.out.println("Task [" + deleteId+ "] removed.");
+            idSet.remove(deleteId);
+            // Prompt use with the updated list
+            displayTasks(taskList, 4);
+        }
     }
+
+
 }
