@@ -20,9 +20,9 @@ public class InputValidator {
                 }
 
                 if (idSet.contains(idToUpdate)) {
-                    break; // valid ID, exit loop
+                    break; // valid IdOperation, exit loop
                 } else {
-                    System.out.println("Invalid ID. Try again.");
+                    System.out.println("Invalid IdOperation. Try again.");
                 }
 
             } catch (InputMismatchException e) {

@@ -1,6 +1,6 @@
 package service;
 
-import helper.ID;
+import helper.IdOperation;
 import helper.InputValidator;
 import model.Status;
 import model.Task;
@@ -30,7 +30,7 @@ public class TaskCRUDService {
         } while (description.isBlank() || description.length() > 30);
 
         // Create new task object
-        int id = ID.generateId(idSet);
+        int id = IdOperation.generateId(idSet);
         Task newTask = new Task(id,description);
         System.out.println("Task with description ('" + description + "') is created and set to 'TDOO' by default");
         taskList.add(newTask);
@@ -62,7 +62,7 @@ public class TaskCRUDService {
         DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         // Print header
         System.out.printf("%-5s | %-30s | %-12s | %-16s | %-16s%n",
-                "ID", "Description", "Status", "Created At", "Updated At");
+                "IdOperation", "Description", "Status", "Created At", "Updated At");
         System.out.println("-------------------------------------------------------------------------------------");
 
         // Print each task
@@ -88,7 +88,7 @@ public class TaskCRUDService {
             return;
         };
 
-        int updateId = InputValidator.getValidIdFromUser(scanner, idSet, "Enter ID of the task to update or [0] to undo: ");
+        int updateId = InputValidator.getValidIdFromUser(scanner, idSet, "Enter IdOperation of the task to update or [0] to undo: ");
         if (updateId == 0) {
             System.out.println("Exiting");
             return;
@@ -161,7 +161,7 @@ public class TaskCRUDService {
         if(!displayTasks(taskList, 4)) {
             return;
         };
-        int deleteId = InputValidator.getValidIdFromUser(scanner, idSet, "Enter ID of the task to delete or [0] to undo: ");
+        int deleteId = InputValidator.getValidIdFromUser(scanner, idSet, "Enter IdOperation of the task to delete or [0] to undo: ");
 
         if (deleteId == 0) {
             return;

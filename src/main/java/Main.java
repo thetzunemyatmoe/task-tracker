@@ -1,5 +1,5 @@
 import helper.FileOperation;
-import helper.ID;
+import helper.IdOperation;
 import helper.InputValidator;
 import model.Task;
 import service.TaskCRUDService;
@@ -13,7 +13,7 @@ public class Main {
         TaskCRUDService taskService = new TaskCRUDService();
         FileOperation fileOperation = new FileOperation(new File("./src/main/java/db/database.json"));
         List<Task> taskList = fileOperation.loadTasks();
-        Set<Integer> idSet = ID.getIdSet(taskList);
+        Set<Integer> idSet = IdOperation.getIdSet(taskList);
 
 
         int isContinue;

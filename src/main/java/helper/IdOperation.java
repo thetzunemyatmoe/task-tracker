@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class ID {
+public class IdOperation {
 
 
     public static int generateId(Set<Integer> idSet) {

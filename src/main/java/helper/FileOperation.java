@@ -44,8 +44,6 @@ public class FileOperation {
             gson.toJson(taskList, fileWriter);
         } catch (Exception e) {
             System.err.println(e.getMessage());
-        } finally {
-            System.out.println("Changes are saved.");
         }
     }
 
