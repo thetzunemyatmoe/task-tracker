@@ -1,28 +1,28 @@
 # Task-Tracker
 
 ## Description
-This project is a simple command line interface (CLI) to track. The application accepts user actions and inputs as arguments, and store the tasks in a JSON file.
+**Task-Tracker** is a simple yet powerful command-line interface (CLI) application for managing and tracking your tasks. The app allows you to organize your work efficiently by adding, updating, and monitoring tasks, all stored in a JSON file for persistence.
 
 ## Features
-- Add, Update, and Delete tasks
-- Mark a task as in progress or done
-- List all tasks
-- List all tasks that are done
-- List all tasks that are not done
-- List all tasks that are in progress
+- **Add, Update, and Delete tasks** – easily manage your task list
+- **Mark tasks** as *In Progress* or *Done*
+- **List tasks**:
+    - All tasks
+    - Completed tasks
+    - Pending tasks
+    - Tasks in progress
 
-## Specification
-This project uses Java 21 as programming language. To manage JSON, `json.simple` library is used.
+## Technologies Used
+- **Language:** Java 21
+- **JSON Management:** Gson
+- **Build Tool:** Maven
+- **Testing:** JUnit
 
-## TODO
-- [x] Enable command line arguments
-- [x] Task class
-- [] JSON file
-- [x] Create functionality
-- [] Read functionality
-- [] Update functionality
-- [] Delete functionality
-- [] More advanced Read functionalities
-
-
-
+## How to Run
+1. Clone the repository
+2. Build the project using Maven:
+   ```bash
+   mvn clean install
+3. Run the application
+4. Follow the on-screen prompts to add, update, delete, or view tasks.
+5. Make sure to save changes at the end of your session to persist your tasks.

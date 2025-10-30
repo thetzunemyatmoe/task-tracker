@@ -22,3 +22,6 @@ public class LocalDateTimeAdapter implements JsonSerializer<LocalDateTime>, Json
         return new JsonPrimitive(localDateTime.format(formatter));
     }
 }
+
+
+
